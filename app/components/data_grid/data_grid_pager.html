@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="col-sm-4">Showing {{elementStart()}} to {{elementEnd()}} of {{totalElements}}</div>
+  <div class="col-sm-8 pull-right">
+    <div class="input-group pull-right">
+        <input type="text" class="form-control pull-right" style="width: 5em" placeholder="Page">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button">Go!</button>
+        </span>
+    </div>
+    <ul class="pagination pull-right">
+      <li [class]="previousClass()">
+        <a href="#" aria-label="First">
+          <span aria-hidden="true">&lt;&lt;</span>
+        </a>
+      </li>
+      <li [class]="previousClass()">
+        <a href="#" aria-label="Previous">
+          <span aria-hidden="true">&lt;</span>
+        </a>
+      </li>
+
+      <li *ngFor="#index of pagerStartIndexRange()"><a href="#">{{index}}</a></li>
+      <li class="active"><a href="#">{{number}}</a></li>
+      <li *ng-for="#index of pagerEndIndexRange()"><a href="#">{{index}}</a></li>
+      <li [class]="nextClass()">
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&gt;</span>
+        </a>
+      </li>
+      <li [class]="nextClass()">
+        <a href="#" aria-label="Last">
+          <span aria-hidden="true">&gt;&gt;</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

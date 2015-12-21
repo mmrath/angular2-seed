@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+        <tr>
+          <td ngFor="#col of tableDef.columnDefs"><a (click)="sort(col.columnName)">{{col.displayName}}</a></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="var row of page.content">
+          <td *ngFor="#col of tableDef.columnDefs">{{row[col.columnName]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <data-grid-pager
+      [number]="page.number"
+      [total-pages]="page.totalPages"
+      [total-elements]="page.totalElements"
+      [size]="page.size"
+      [number-of-elements]="page.numberOfElements"
+      [page-sizes]="pageSizes">
+    </data-grid-pager>
+  </div>
+</div>
