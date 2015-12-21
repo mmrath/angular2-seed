@@ -2,6 +2,7 @@ import {Component} from 'angular2/core';
 import {RoleService} from '../../services/role/role';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {Permission, Role} from '../../models/security/security';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'role',
@@ -10,10 +11,10 @@ import {Permission, Role} from '../../models/security/security';
   pipes: []
 })
 export class RoleComponent {
-  allPermissions: Array<Permission>;
+  permissionList: Array<Permission>;
   roleList:Array<Role>;
   constructor(public roleService: RoleService) {
-    this.allPermissions = roleService.allPermissions();
+    roleService.allPermissions().subscribe(res => this.permissionList = res);
 
   }
 }

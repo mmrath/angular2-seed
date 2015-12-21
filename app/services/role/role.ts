@@ -7,7 +7,7 @@ import {Permission} from '../../models/security/Permission';
 export class RoleService {
   allPermissionsData: Array<Permission>;
 
-  constructor(htttp: Http) {
+  constructor(private http: Http) {
     this.allPermissionsData = [{ 'id': 1, 'resource': 'SECURITY_USER', 'accessLevel': 'READ', 'description': 'View User', 'name': 'SECURITY_USER:READ' },
       { 'id': 2, 'resource': 'SECURITY_USER', 'accessLevel': 'CREATE', 'description': 'Create User', 'name': 'SECURITY_USER:CREATE' },
       { 'id': 3, 'resource': 'SECURITY_USER', 'accessLevel': 'UPDATE', 'description': 'Update User', 'name': 'SECURITY_USER:UPDATE' },
@@ -23,8 +23,15 @@ export class RoleService {
     ];
   }
 
-  allPermissions(): Array<Permission> {
-    return this.allPermissionsData;
+  allPermissions() {
+    return this.http
+    .get('http://localhost:8080/api/security/permissions')
+    .map((responseData) => {
+      return responseData.json();
+    })
+    .map((permissions: Array<Permission>) => {
+      return permissions;
+    });
   }
 
 }
