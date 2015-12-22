@@ -1,20 +1,18 @@
 import {Component, ViewEncapsulation} from 'angular2/core';
 
-import {UserService} from '../../services/user/user';
-import {RoleService} from '../../services/role/role';
+import {UserService, RoleService} from '../../services/admin/admin';
 
 
 import {
-  RouteConfig,
-  ROUTER_DIRECTIVES
+RouteConfig,
+ROUTER_DIRECTIVES
 } from 'angular2/router';
 // import {HTTP_PROVIDERS} from 'angular2/http';
 
 import {HomeCmp} from '../home/home';
 import {AboutCmp} from '../about/about';
 import {NameList} from '../../services/name_list';
-import {UserComponent} from '../user/user';
-import {RoleComponent} from '../role/role';
+import {UserComponent,RoleComponent,RoleDetailComponent} from '../admin/admin';
 
 @Component({
   selector: 'app',
@@ -28,7 +26,9 @@ import {RoleComponent} from '../role/role';
   { path: '/', component: HomeCmp, as: 'Home' },
   { path: '/about', component: AboutCmp, as: 'About' },
   { path: '/user', component: UserComponent, as: 'User' },
-  { path: '/role', component: RoleComponent, as: 'Role' }
+  { path: '/role', component: RoleComponent, as: 'Role' },
+  { path: '/role/new', component: RoleDetailComponent, as: 'RoleNew', data: { isNew: true } },
+  { path: '/role/:id', component: RoleDetailComponent, as: 'RoleEdit', data: { isNew: false } }
 
 ])
-export class AppCmp {}
+export class AppCmp { }

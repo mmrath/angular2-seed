@@ -32,6 +32,8 @@ export const VERSION              = appVersion();
 export const VERSION_NPM          = '2.14.7';
 export const VERSION_NODE         = '4.0.0';
 
+export const API_BASE             = ENV === 'dev' ? `http://localhost:8080` : ``;
+
 // Declare NPM dependencies (Note that globs should not be injected).
 export const NPM_DEPENDENCIES = [
   { src: 'systemjs/dist/system-polyfills.js', dest: LIB_DEST },
