@@ -1,12 +1,12 @@
 import {ColumnDef} from './column_def';
-export interface TableDef {
+export class TableDef {
   id: number;
   tableName: string;
   displayName: string;
   insertable: boolean;
   updatable: boolean;
   deletable: boolean;
-  primaryKeyColumnName:string;
-  versionColumnName:string;
-  columnDefs:Array<ColumnDef>;
+  primaryKeyColumnName: string;
+  versionColumnName: string;
+  columnDefs: Array<ColumnDef>;
 }

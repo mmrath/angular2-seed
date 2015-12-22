@@ -17,6 +17,6 @@ export class RoleComponent {
   roleList:Page<Role>;
   constructor(public roleService: RoleService) {
     roleService.allPermissions().subscribe(res => this.permissionList = res);
-    roleService.findAllRoles().subscribe(res => this.roleList = res);
+    roleService.findAll().subscribe(res => this.roleList = res);
   }
 }

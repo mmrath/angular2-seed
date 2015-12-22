@@ -1,7 +1,9 @@
-export interface Permission {
-  id: Number;
-  name: string;
-  resource: string;
-  accessLevel: string;
-  description: string;
+export class Permission {
+  constructor(
+    public id: number,
+    public name: string,
+    public resource: string,
+    public accessLevel: string,
+    public description: string
+  ) { }
 }
