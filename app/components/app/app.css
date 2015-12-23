@@ -1,32 +1,37 @@
-.sample-app-content {
-  font-family: Verdana;
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
 }
-.sample-app-content h1 {
-  color: #999;
-  font-size: 3em;
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
 }
-.sample-app-content h2 {
-  color: #990000;
-  font-size: 2em;
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #f5f5f5;
 }
-.sample-app-content p,
-.sample-app-content nav {
-  padding: 30px;
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+  padding: 60px 15px 0;
 }
-.sample-app-content li,
-.sample-app-content p {
-  font-size: 1.2em;
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
 }
-.sample-app-content li {
-  font-family: Consolas;
-}
-.sample-app-content nav a {
-  display: inline-block;
-  margin-right: 15px;
-}
-.sample-app-content input,
-.sample-app-content button {
-  padding: 5px;
-  font-size: 1em;
-  outline: none;
+
+code {
+  font-size: 80%;
 }
