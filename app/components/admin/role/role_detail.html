@@ -22,19 +22,21 @@
                 [attr.id]="description" [attr.placeholder]="'Description'"  ngControl="description"  #name="ngForm" />
         </div>
       </div>
-
       <table class="table table-striped table-hover table-bordered table-sm">
         <thead>
           <tr>
             <th>Resource</th>
-            <th [attr.colspan]="maxAccessLevels">Access Level</th>
+            <th *ngFor="#accessLevel of accessLevels"><div class="text-center">{{accessLevel}}</div></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="#permissionGroup of permissionGroups">
-            <td>{{permissionGroup.resource}}</td>
-            <td template="ngFor #permission of permissionGroup.permissions">
-              <div><label><input type="checkbox" value>{{permission.accessLevel}}</label></div>
+
+          <tr *ngFor="#resource of resources">
+            <td>{{resource}}</td>
+            <td *ngFor="#accessLevel of accessLevels">
+              <label *ngIf="isValidPermission(resource, accessLevel)">
+                  <input type="checkbox" [(ngModel)]="permissionGroups[resource][accessLevel].selected" value>{{accessLevel}}
+              </label>
             </td>
           </tr>
         </tbody>

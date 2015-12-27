@@ -1,37 +1,51 @@
 <div class="row">
-  <div class="col-sm-4">Showing {{elementStart()}} to {{elementEnd()}} of {{totalElements}}</div>
-  <div class="col-sm-8 pull-right">
-    <div class="input-group pull-right">
-        <input type="text" class="form-control pull-right" style="width: 5em" placeholder="Page">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button">Go!</button>
-        </span>
-    </div>
-    <ul class="pagination pull-right">
-      <li [class]="previousClass()">
-        <a href="#" aria-label="First">
-          <span aria-hidden="true">&lt;&lt;</span>
-        </a>
-      </li>
-      <li [class]="previousClass()">
-        <a href="#" aria-label="Previous">
-          <span aria-hidden="true">&lt;</span>
-        </a>
-      </li>
+  <div class="col-sm-3">Showing {{elementStart}} to {{elementEnd}} of {{totalElements}}</div>
 
-      <li *ngFor="#index of pagerStartIndexRange()"><a href="#">{{index}}</a></li>
-      <li class="active"><a href="#">{{number}}</a></li>
-      <li *ng-for="#index of pagerEndIndexRange()"><a href="#">{{index}}</a></li>
-      <li [class]="nextClass()">
-        <a href="#" aria-label="Next">
-          <span aria-hidden="true">&gt;</span>
+  <div class="col-sm-4">
+    <ul class="pagination">
+      <li class="page-item" [ngClass]="{disabled:isPreviousDisabled}">
+        <a class="page-link" href (click)="selectPage(1, $event)" aria-label="First">
+          <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li [class]="nextClass()">
-        <a href="#" aria-label="Last">
-          <span aria-hidden="true">&gt;&gt;</span>
+      <li class="page-item" [ngClass]="{disabled:isPreviousDisabled}">
+        <a class="page-link" href (click)="selectPage(pageNumber-1, $event)" aria-label="Previous">
+          <span aria-hidden="true">&lsaquo;</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="#index of pagerStartIndexRange">
+        <a class="page-link" href (click)="selectPage(index, $event)">{{index}}</a>
+      </li>
+      <li class="page-item active">
+        <a class="page-link" href (click)="selectPage(pageNumber, $event)">{{pageNumber}}</a>
+      </li>
+      <li class="page-item" *ngFor="#index of pagerEndIndexRange">
+        <a class="page-link" href (click)="selectPage(index, $event)">{{index}}</a>
+      </li>
+      <li class="page-item" [ngClass]="{disabled:isNextDisabled}">
+        <a class="page-link" href (click)="selectPage(pageNumber+1, $event)" aria-label="Next">
+          <span aria-hidden="true">&rsaquo;</span>
+        </a>
+      </li>
+      <li class="page-item" [ngClass]="{disabled:isNextDisabled}">
+        <a class="page-link" href (click)="selectPage(totalPages, $event)" aria-label="Last">
+          <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
     </ul>
   </div>
+  <div class="col-sm-2">
+    <select [(ngModel)]="size" (change)="onPageSizeChange($event)">
+      <option *ngFor="#pageSize of pageSizes">{{pageSize}}</option>
+    </select>
+  </div>
+  <div class="col-sm-3">
+    <div class="input-group">
+      <input type="number" min="1" [attr.max]="totalPages" class="form-control" style="width: 5em" placeholder="Page">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div>
+  </div>
+
 </div>

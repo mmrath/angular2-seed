@@ -4,6 +4,7 @@ export class Permission {
     public name: string,
     public resource: string,
     public accessLevel: string,
-    public description: string
+    public description: string,
+    public selected: boolean
   ) { }
 }

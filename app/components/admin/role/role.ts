@@ -2,21 +2,65 @@ import {Component} from 'angular2/core';
 import {RoleService} from '../../../services/admin/admin';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
-import {Permission, Role} from '../../../models/admin/admin';
-import {Page} from '../../../models/core/core';
+import {Role} from '../../../models/admin/admin';
+import {Page, TableDef, ColumnDef} from '../../../models/core/core';
+import {DataGrid} from '../../data_grid/data_grid';
 import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'role',
   templateUrl: 'components/admin/role/role.html',
-  directives: [CORE_DIRECTIVES,ROUTER_DIRECTIVES],
+  directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, DataGrid],
   pipes: []
 })
 export class RoleComponent {
-  permissionList: Array<Permission>;
-  roleList:Page<Role>;
+  rolePage: Page<Role> = new Page<Role>();
+  roleTableDef: TableDef;
   constructor(public roleService: RoleService) {
-    roleService.findAllPermissions().subscribe(res => this.permissionList = res);
-    roleService.findAll().subscribe(res => this.roleList = res);
+    roleService.findAll().subscribe(
+      res => this.rolePage = res
+      );
+    var tableDef: TableDef = new TableDef();
+
+    tableDef.tableName = 'role';
+    tableDef.displayName = 'Roles';
+    tableDef.insertable = true;
+    tableDef.updatable = true;
+    tableDef.deletable = true;
+
+    var columnDefs: Array<ColumnDef> = new Array<ColumnDef>();
+
+    var idColumn: ColumnDef = new ColumnDef();
+    idColumn.id = 0;
+    idColumn.columnIndex = 1;
+    idColumn.columnName = 'id';
+    idColumn.displayName = 'ID';
+    idColumn.searchable = true;
+    idColumn.type = 'number';
+    idColumn.length = 10;
+    columnDefs.push(idColumn);
+
+    var nameColumn: ColumnDef = new ColumnDef();
+    nameColumn.id = 0;
+    nameColumn.columnIndex = 2;
+    nameColumn.columnName = 'name';
+    nameColumn.displayName = 'Name';
+    nameColumn.searchable = true;
+    nameColumn.type = 'string';
+    nameColumn.length = 30;
+    columnDefs.push(nameColumn);
+
+    var descriptionColumn: ColumnDef = new ColumnDef();
+    descriptionColumn.id = 0;
+    descriptionColumn.columnIndex = 2;
+    descriptionColumn.columnName = 'description';
+    descriptionColumn.displayName = 'Description';
+    descriptionColumn.searchable = true;
+    descriptionColumn.type = 'string';
+    descriptionColumn.length = 60;
+    columnDefs.push(descriptionColumn);
+
+    tableDef.columnDefs = columnDefs;
+    this.roleTableDef = tableDef;
   }
 }

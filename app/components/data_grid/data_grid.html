@@ -7,7 +7,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="var row of page.content">
+        <tr *ngFor="#row of page.content">
           <td *ngFor="#col of tableDef.columnDefs">{{row[col.columnName]}}</td>
         </tr>
       </tbody>
@@ -18,11 +18,14 @@
   <div class="col-md-12">
     <data-grid-pager
       [number]="page.number"
-      [total-pages]="page.totalPages"
-      [total-elements]="page.totalElements"
+      [totalPages]="page.totalPages"
+      [totalElements]="page.totalElements"
       [size]="page.size"
-      [number-of-elements]="page.numberOfElements"
-      [page-sizes]="pageSizes">
+      [numberOfElements]="page.numberOfElements"
+      [pageSizes]="pageSizes"
+      (pageChanged)="onPageChange($event)"
+      (pageSizeChanged)="onPageSizeChange($event)"
+      >
     </data-grid-pager>
   </div>
 </div>
