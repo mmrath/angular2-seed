@@ -1,17 +1,24 @@
 
 <div class="row">
   <div class="col-sm-12">
-    <div class="col-sm-4" *ngIf="tableDef.insertable">
-      <button class="btn" (click)="navigateToNew($event)">New</button>
-    </div>
+    <div class="row">
+      <div class="col-sm-4" *ngIf="tableDef.insertable">
+        <button class="btn" (click)="navigateToNew($event)">New</button>
+      </div>
+      <div class="col-sm-4">
+      </div>
+  </div>
   </div>
 
   <div class="col-md-12">
-    <table class="table table-striped table-hover table-sm table-bordered">
+    <table class="table dataTable table-striped table-hover table-sm table-bordered">
       <thead>
         <tr>
-          <td *ngFor="#col of tableDef.columnDefs"><a (click)="sort(col.columnName)">{{col.displayName}}</a></td>
-          <td *ngIf="tableDef.updatable || tableDef.deletable">Action</td>
+          <th *ngFor="#col of tableDef.columnDefs"
+            [ngClass]="{sorting: col.sortable}" (click)="sort(col.columnName)">
+            <a>{{col.displayName}}</a>
+          </th>
+          <th *ngIf="tableDef.updatable || tableDef.deletable">Action</th>
         </tr>
       </thead>
       <tbody>

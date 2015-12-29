@@ -5,8 +5,8 @@ export class PageRequest {
 }
 
 export class Order {
-  public static get ASC(): string { return 'ASC'; }
-  public static get DESC(): string { return 'DESC'; }
+  public static get ASC(): string { return 'asc'; }
+  public static get DESC(): string { return 'desc'; }
 
   property: string;
   direction: string;

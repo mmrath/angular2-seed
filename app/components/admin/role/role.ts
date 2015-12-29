@@ -38,6 +38,7 @@ export class RoleComponent {
     idColumn.columnName = 'id';
     idColumn.displayName = 'ID';
     idColumn.searchable = true;
+    idColumn.sortable=true;
     idColumn.type = 'number';
     idColumn.length = 10;
     columnDefs.push(idColumn);
@@ -48,6 +49,7 @@ export class RoleComponent {
     nameColumn.columnName = 'name';
     nameColumn.displayName = 'Name';
     nameColumn.searchable = true;
+    nameColumn.sortable = true;
     nameColumn.type = 'string';
     nameColumn.length = 30;
     columnDefs.push(nameColumn);
@@ -58,6 +60,7 @@ export class RoleComponent {
     descriptionColumn.columnName = 'description';
     descriptionColumn.displayName = 'Description';
     descriptionColumn.searchable = true;
+    descriptionColumn.sortable = false;
     descriptionColumn.type = 'string';
     descriptionColumn.length = 60;
     columnDefs.push(descriptionColumn);

@@ -7,7 +7,7 @@ export class ColumnDef {
   insertable: boolean;
   updatable: boolean;
   searchable: boolean;
-  sortable: string;
+  sortable: boolean;
   visible: boolean;//Visible in List
   type: string;
   length: number;//Datatype Length

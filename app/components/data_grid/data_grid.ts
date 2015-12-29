@@ -2,9 +2,8 @@ import {Component, View, Input, Output, EventEmitter} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {Http, Headers} from 'angular2/http';
 import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
-import {TableDef, Page, PageRequest} from '../../models/core/core';
+import {TableDef, Page, PageRequest, Order} from '../../models/core/core';
 import {DataGridPager} from './data_grid_pager';
-import {UrlConstants} from '../../services/url_constants';
 import {Uri} from '../../services/uri';
 
 @Component({
@@ -22,6 +21,7 @@ export class DataGrid {
   @Input() editLink: string; //This must take id as a paramater
   page: Page<any> = new Page();
   pageRequest: PageRequest = new PageRequest();
+  sortingColumn:string;
 
   constructor(private router: Router, private http: Http) {
   }
@@ -31,26 +31,19 @@ export class DataGrid {
     if (pageSize <= 0 || pageSize >= this.page.totalElements) {
       return;
     }
-
     this.pageRequest.size = pageSize;
     this.pageRequest.page = 0;
-    this.http.get(this.getPageRequestUrl()).map(response => response.json())
-      .map((data: Page<any>) => { return data; })
-      .subscribe(
-      response => { console.error('Response data:' + JSON.stringify(response)); this.page = response; },
-      err => { console.error('Error while fetching data:' + err); });
+    this.refreshPage();
   }
 
   onPageChange(pageNumber: number) {
     console.log('Page number:' + pageNumber);
+    if (pageNumber < 1 || pageNumber > this.page.totalPages) {
+      return;
+    }
     this.pageRequest.page = pageNumber - 1;
     this.pageRequest.size = this.page.size;
-    this.http.get(this.getPageRequestUrl())
-      .map(response => response.json())
-      .map((data: Page<any>) => { return data; })
-      .subscribe(
-      response => { this.page = response; },
-      err => { console.error('Error while fetching data:' + err); });
+    this.refreshPage();
   }
 
   navigateToNew(event?: MouseEvent) {
@@ -78,28 +71,46 @@ export class DataGrid {
     }
     var id: number = row[this.tableDef.idColumnName];
     console.log('Deleting row:' + JSON.stringify(row));
-    console.log('API Base:' + this.apiBase);
     var headers = new Headers();
     this.http.delete(this.apiBase + '/' + id, { headers: headers }).subscribe(
-      res => { console.log('Response:' + res); },
+      res => {
+        if (this.page.numberOfElements === 1 && this.page.number !== 0) {
+          this.pageRequest.page = this.pageRequest.page - 1;
+        }
+        this.refreshPage();
+      },
       err => { console.log('Error:' + err); }
       );
   }
 
   ngOnChanges() {
     console.log('changed value' + JSON.stringify(this.page));
-    this.http.get(this.apiBase).map(response => response.json())
-      .map((data: Page<any>) => { return data; })
-      .subscribe(
-      response => {
-        this.page = response;
-        console.log(JSON.stringify(this.page));
-      },
-      err => { console.error('Error while fetching data:' + err); });
+    this.refreshPage();
   }
 
   sort(colName: string) {
     console.log('Sort by column:' + colName);
+    var found: boolean = false;
+    var newOrders = new Array<Order>();
+    if (typeof this.pageRequest.sort !== 'undefined') {
+      for (var order of this.pageRequest.sort) {
+        if (order.property === colName) {
+          found = true;
+          if (order.direction === Order.DESC) {
+            order.direction = Order.ASC;
+          } else {
+            order.direction = Order.DESC;
+          }
+          newOrders.push(order);
+        }
+      }
+      this.pageRequest.sort = newOrders;
+      if (!found) {
+        this.pageRequest.sort.push({ property: colName, direction: Order.ASC });
+      }
+    }
+    this.pageRequest.page = 0;
+    this.refreshPage();
   }
 
   private getPageRequestUrl(): string {
@@ -107,7 +118,6 @@ export class DataGrid {
     queryUri.addQueryParam('page', this.pageRequest.page);
     queryUri.addQueryParam('size', this.pageRequest.size);
     for (var order of this.pageRequest.sort) {
-      queryUri.addQueryParam('sort', order.property);
       if (typeof order.direction !== 'undefined') {
         queryUri.addQueryParam('sort', order.property + ',' + order.direction);
       } else {
@@ -115,5 +125,14 @@ export class DataGrid {
       }
     }
     return queryUri.toString();
+  }
+
+  private refreshPage() {
+    this.http.get(this.getPageRequestUrl())
+      .map(response => response.json())
+      .map((data: Page<any>) => { return data; })
+      .subscribe(
+      response => { this.page = response; },
+      err => { console.error('Error while fetching data:' + err); });
   }
 }

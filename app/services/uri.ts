@@ -1,3 +1,5 @@
+/// <reference path="../../tools/typings/tsd/urijs/URIjs.d.ts" />
+
 import URI = require('urijs');
 
 export class Uri {
