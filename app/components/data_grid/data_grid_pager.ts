@@ -1,4 +1,4 @@
-import {Component, View, Input, Output, EventEmitter, Event} from 'angular2/core';
+import {Component, View, Input, Output, EventEmitter} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 
 @Component({
@@ -50,9 +50,12 @@ export class DataGridPager {
   }
 
   onPageSizeChange(event?: Event) {
-    if (event.target.value > 0) {
-      console.log('New page size:' + event.target.value);
-      this.pageSizeChanged.next(+(event.target.value));
+    if (event) {
+      var targetValue: number = (event.target as any).value as number;
+      if (targetValue > 0) {
+        console.log('New page size:' + targetValue);
+        this.pageSizeChanged.next(targetValue);
+      }
     }
   }
 
@@ -98,19 +101,19 @@ export class DataGridPager {
     for (var i = this.pagerStartIndex; i < this.pageNumber; i++) {
       pagerStartIndexRangeArr.push(i);
     }
+    this.pagerStartIndexRange = pagerStartIndexRangeArr;
+
     var pagerEndIndexRangeArr = [];
     for (var i = this.pageNumber + 1; i <= this.pagerEndIndex; i++) {
       pagerEndIndexRangeArr.push(i);
     }
+    this.pagerEndIndexRange = pagerEndIndexRangeArr;
 
     this.isPreviousDisabled = this._isPreviousDisabled();
     this.isNextDisabled = this._isNextDisabled();
 
     this.elementStart = ((this.pageNumber - 1) * this.size) + 1;
     this.elementEnd = ((this.pageNumber - 1) * this.size) + this.numberOfElements;
-
-    //console.log('Page size:'+ this.size);
-    //console.log('Page sizes:'+ this.pageSizes);
 
     if (this.size > 0 && this.pageSizes.indexOf(this.size) <= -1) {
       //Size does not exist. Insert and sort

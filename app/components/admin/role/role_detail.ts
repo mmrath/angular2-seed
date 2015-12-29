@@ -1,9 +1,9 @@
 import {Component} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {RoleService} from '../../../services/admin/admin';
-import {Role, Permission, PermissionGroup} from '../../../models/admin/admin';
+import {Role, Permission} from '../../../models/admin/admin';
 import {RouteParams, RouteData, ROUTER_DIRECTIVES} from 'angular2/router';
-import {Observable} from 'rxjs/Observable';
+//import {Observable} from 'rxjs/Observable';
 @Component({
   selector: 'role-detail',
   templateUrl: 'components/admin/role/role_detail.html',
@@ -64,12 +64,8 @@ export class RoleDetailComponent {
     }
     this.role.permissions = selectedPerms;
     this.roleService.save(this.role).subscribe(
-      res => { console.log('Success') },
+      res => { console.log('Success'); },
       err => { console.log('Error' + err); });
-  }
-
-  containsAccessLevel(permissionGroup: PermissionGroup, accessLevel: string): boolean {
-    return accessLevel in permissionGroup.permissions;
   }
 
   private updatePermissionSelectStatus() {

@@ -1,3 +1,2 @@
-<a [routerLink]="['/RoleNew']">Role New</a>
-<a [routerLink]="['/RoleEdit', {'id': '1'}]" >Role Edit</a>
-<data-grid [tableDef]="roleTableDef" [page]="rolePage"></data-grid>
+<data-grid [tableDef]="roleTableDef" [newLink]="'/RoleNew'"
+[editLink]="'/RoleEdit'" [apiBase]="apiBase()"></data-grid>

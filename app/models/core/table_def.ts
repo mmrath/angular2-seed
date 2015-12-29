@@ -7,6 +7,7 @@ export class TableDef {
   updatable: boolean;
   deletable: boolean;
   primaryKeyColumnName: string;
+  idColumnName:string;
   versionColumnName: string;
   columnDefs: Array<ColumnDef>;
 }

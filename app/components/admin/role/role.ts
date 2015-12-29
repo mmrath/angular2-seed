@@ -1,5 +1,6 @@
 import {Component} from 'angular2/core';
 import {RoleService} from '../../../services/admin/admin';
+import {UrlConstants} from '../../../services/url_constants';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Role} from '../../../models/admin/admin';
@@ -24,6 +25,7 @@ export class RoleComponent {
 
     tableDef.tableName = 'role';
     tableDef.displayName = 'Roles';
+    tableDef.idColumnName = 'id';
     tableDef.insertable = true;
     tableDef.updatable = true;
     tableDef.deletable = true;
@@ -62,5 +64,9 @@ export class RoleComponent {
 
     tableDef.columnDefs = columnDefs;
     this.roleTableDef = tableDef;
+  }
+
+  apiBase(): string {
+    return UrlConstants.ROLE_API;
   }
 }

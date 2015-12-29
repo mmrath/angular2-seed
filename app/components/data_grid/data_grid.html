@@ -1,14 +1,26 @@
+
 <div class="row">
+  <div class="col-sm-12">
+    <div class="col-sm-4" *ngIf="tableDef.insertable">
+      <button class="btn" (click)="navigateToNew($event)">New</button>
+    </div>
+  </div>
+
   <div class="col-md-12">
-    <table class="table table-striped table-hover table-bordered">
+    <table class="table table-striped table-hover table-sm table-bordered">
       <thead>
         <tr>
           <td *ngFor="#col of tableDef.columnDefs"><a (click)="sort(col.columnName)">{{col.displayName}}</a></td>
+          <td *ngIf="tableDef.updatable || tableDef.deletable">Action</td>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="#row of page.content">
           <td *ngFor="#col of tableDef.columnDefs">{{row[col.columnName]}}</td>
+          <td *ngIf="tableDef.updatable || tableDef.deletable">
+            <a href *ngIf="tableDef.updatable" (click)="navigateToEdit(row[tableDef.idColumnName],$event)">Edit</a>
+            <a href *ngIf="tableDef.deletable" (click)="deleteRow(row,$event)">Delete</a>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -24,8 +36,7 @@
       [numberOfElements]="page.numberOfElements"
       [pageSizes]="pageSizes"
       (pageChanged)="onPageChange($event)"
-      (pageSizeChanged)="onPageSizeChange($event)"
-      >
+      (pageSizeChanged)="onPageSizeChange($event)">
     </data-grid-pager>
   </div>
 </div>

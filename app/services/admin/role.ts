@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
 import {UrlConstants} from '../url_constants';
-import {Permission, PermissionGroup, Role} from '../../models/admin/admin';
+import {Permission, Role} from '../../models/admin/admin';
 import {Page} from '../../models/core/core';
 import {Observable} from 'rxjs/Observable';
 
@@ -62,8 +62,6 @@ export class RoleService {
   save(role: Role): Observable<Role> {
     console.log(JSON.stringify(role));
     var headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    headers.append('Access-Control-Allow-Origin', '*');
     return this.http.post(UrlConstants.ROLE_API, JSON.stringify(role), { headers: headers })
       .map((responseData) => {
       console.log(responseData);
