@@ -3,7 +3,7 @@
   <div class="col-sm-12">
     <div class="row">
       <div class="col-sm-4" *ngIf="tableDef.insertable">
-        <button class="btn" (click)="navigateToNew($event)">New</button>
+        <button class="btn btn-primary" (click)="navigateToNew($event)">Add New</button>
       </div>
       <div class="col-sm-4">
       </div>
@@ -15,8 +15,8 @@
       <thead>
         <tr>
           <th *ngFor="#col of tableDef.columnDefs"
-            [ngClass]="{sorting: col.sortable}" (click)="sort(col.columnName)">
-            <a>{{col.displayName}}</a>
+            [ngClass]="getSortClass(col)" (click)="sort(col)">
+            {{col.displayName}}
           </th>
           <th *ngIf="tableDef.updatable || tableDef.deletable">Action</th>
         </tr>

@@ -2,12 +2,12 @@ import {Component, View, Input, Output, EventEmitter} from 'angular2/core';
 import {CORE_DIRECTIVES} from 'angular2/common';
 import {Http, Headers} from 'angular2/http';
 import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
-import {TableDef, Page, PageRequest, Order} from '../../models/core/core';
+import {TableDef, ColumnDef, Page, PageRequest, Order} from '../../models/core/core';
 import {DataGridPager} from './data_grid_pager';
 import {Uri} from '../../services/uri';
 
 @Component({
-  selector: 'data-grid',
+  selector: 'data-grid'
 })
 @View({
   templateUrl: 'components/data_grid/data_grid.html',
@@ -21,7 +21,6 @@ export class DataGrid {
   @Input() editLink: string; //This must take id as a paramater
   page: Page<any> = new Page();
   pageRequest: PageRequest = new PageRequest();
-  sortingColumn:string;
 
   constructor(private router: Router, private http: Http) {
   }
@@ -88,36 +87,67 @@ export class DataGrid {
     this.refreshPage();
   }
 
-  sort(colName: string) {
-    console.log('Sort by column:' + colName);
+  sort(col: ColumnDef) {
+    if (typeof col.sortable === 'undefined' || !col.sortable) {
+      return;
+    }
+    console.log('Sort by column:' + col.columnName);
+    var colName = col.columnName;
     var found: boolean = false;
-    var newOrders = new Array<Order>();
+    var remove = false;
+    var index = -1;
     if (typeof this.pageRequest.sort !== 'undefined') {
-      for (var order of this.pageRequest.sort) {
+      for (var i = 0; i < this.pageRequest.sort.length; i++) {
+        var order = this.pageRequest.sort[i];
         if (order.property === colName) {
           found = true;
+          index = i;
           if (order.direction === Order.DESC) {
-            order.direction = Order.ASC;
+            remove = true;
           } else {
             order.direction = Order.DESC;
           }
-          newOrders.push(order);
         }
       }
-      this.pageRequest.sort = newOrders;
-      if (!found) {
-        this.pageRequest.sort.push({ property: colName, direction: Order.ASC });
+    } else {
+      this.pageRequest.sort = [];
+    }
+    if (found) {
+      var order = this.pageRequest.sort[index];
+      this.pageRequest.sort.splice(index, 1); //remove
+      if (!remove) {
+        this.pageRequest.sort.unshift(order); //add at the begining
       }
+    } else {
+      var order = new Order(); //A new order
+      order.property = colName;
+      order.direction = Order.ASC;
+      this.pageRequest.sort.unshift(order);
     }
     this.pageRequest.page = 0;
     this.refreshPage();
   }
-
+  getSortClass(col: ColumnDef): string {
+    if (typeof col.sortable !== 'undefined' && col.sortable) {
+      for (var order of this.pageRequest.sort) {
+        if (order.property === col.columnName) {
+          if (order.direction === Order.ASC) {
+            return 'sorting_asc';
+          } else {
+            return 'sorting_desc';
+          }
+        }
+      }
+      return 'sorting';
+    }
+    return 'disabled';
+  }
   private getPageRequestUrl(): string {
     var queryUri = new Uri(this.apiBase);
     queryUri.addQueryParam('page', this.pageRequest.page);
     queryUri.addQueryParam('size', this.pageRequest.size);
     for (var order of this.pageRequest.sort) {
+      console.log('Sorting with:' + JSON.stringify(order));
       if (typeof order.direction !== 'undefined') {
         queryUri.addQueryParam('sort', order.property + ',' + order.direction);
       } else {
@@ -126,6 +156,7 @@ export class DataGrid {
     }
     return queryUri.toString();
   }
+
 
   private refreshPage() {
     this.http.get(this.getPageRequestUrl())
