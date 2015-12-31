@@ -16,7 +16,6 @@ export class DataGridPager {
   @Input() number: number; // Page number starts from zero
   @Input() first: boolean;
   @Input() numberOfElements: number;
-  @Input() pageSizes: Array<number> = [10, 20, 50, 100, 200];
 
   pageNumber: number; //Page number starts from 1
   pagerStartIndex: number;
@@ -30,7 +29,6 @@ export class DataGridPager {
   elementEnd: number;
 
   @Output() private pageChanged: EventEmitter<number> = new EventEmitter();
-  @Output() private pageSizeChanged: EventEmitter<number> = new EventEmitter();
 
   ngOnChanges() {
     this.compute();
@@ -46,16 +44,6 @@ export class DataGridPager {
       this.pageChanged.next(page);
     } else {
       console.log('Invalid navigation');
-    }
-  }
-
-  onPageSizeChange(event?: Event) {
-    if (event) {
-      var targetValue: number = (event.target as any).value as number;
-      if (targetValue > 0) {
-        console.log('New page size:' + targetValue);
-        this.pageSizeChanged.next(targetValue);
-      }
     }
   }
 
@@ -115,20 +103,6 @@ export class DataGridPager {
     this.elementStart = ((this.pageNumber - 1) * this.size) + 1;
     this.elementEnd = ((this.pageNumber - 1) * this.size) + this.numberOfElements;
 
-    if (this.size > 0 && this.pageSizes.indexOf(this.size) <= -1) {
-      //Size does not exist. Insert and sort
-      console.log('Page size to add:' + this.size);
-      console.log('Page sizes:' + this.pageSizes);
-      this.pageSizes.push(this.size);
-      this.pageSizes.sort((a, b) => a - b);
-    }
+
   }
-}
-
-export interface PageSizeChangeEvent {
-  pageSize: number;
-}
-
-export interface PageChangeEvent {
-  page: number;
 }

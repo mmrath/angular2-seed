@@ -1,28 +1,28 @@
-table.dataTable thead > tr > th.sorting_asc,
-table.dataTable thead > tr > th.sorting_desc,
-table.dataTable thead > tr > th.sorting,
-table.dataTable thead > tr > td.sorting_asc,
-table.dataTable thead > tr > td.sorting_desc,
-table.dataTable thead > tr > td.sorting {
+table.data-table thead > tr > th.sorting_asc,
+table.data-table thead > tr > th.sorting_desc,
+table.data-table thead > tr > th.sorting,
+table.data-table thead > tr > td.sorting_asc,
+table.data-table thead > tr > td.sorting_desc,
+table.data-table thead > tr > td.sorting {
   padding-right: 30px;
 }
-table.dataTable thead > tr > th:active,
-table.dataTable thead > tr > td:active {
+table.data-table thead > tr > th:active,
+table.data-table thead > tr > td:active {
   outline: none;
 }
-table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc,
-table.dataTable thead .sorting_desc,
-table.dataTable thead .sorting_asc_disabled,
-table.dataTable thead .sorting_desc_disabled {
+table.data-table thead .sorting,
+table.data-table thead .sorting_asc,
+table.data-table thead .sorting_desc,
+table.data-table thead .sorting_asc_disabled,
+table.data-table thead .sorting_desc_disabled {
   cursor: pointer;
   position: relative;
 }
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:after,
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {
+table.data-table thead .sorting:after,
+table.data-table thead .sorting_asc:after,
+table.data-table thead .sorting_desc:after,
+table.data-table thead .sorting_asc_disabled:after,
+table.data-table thead .sorting_desc_disabled:after {
   position: absolute;
   bottom: 8px;
   right: 8px;
@@ -30,20 +30,24 @@ table.dataTable thead .sorting_desc_disabled:after {
   font-family: 'Glyphicons Halflings';
   opacity: 0.5;
 }
-table.dataTable thead .sorting:after {
+table.data-table thead .sorting:after {
   opacity: 0.2;
-  content: "S";
+  content: "\e150";
   /* sort */
 }
-table.dataTable thead .sorting_asc:after {
-  content: "A";
+table.data-table thead .sorting_asc:after {
+  content: "\e156";
   /* sort-by-attributes */
 }
-table.dataTable thead .sorting_desc:after {
-  content: "D";
+table.data-table thead .sorting_desc:after {
+  content: "\e155";
   /* sort-by-attributes-alt */
 }
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {
+table.data-table thead .sorting_asc_disabled:after,
+table.data-table thead .sorting_desc_disabled:after {
   color: #eee;
+}
+
+.data-table > ul.pagination{
+  margin-top: 0;
 }

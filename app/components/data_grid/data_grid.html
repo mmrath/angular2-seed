@@ -2,17 +2,21 @@
 <div class="row">
   <div class="col-sm-12">
     <div class="row">
-      <div class="col-sm-4" *ngIf="tableDef.insertable">
-        <button class="btn btn-primary" (click)="navigateToNew($event)">Add New</button>
+      <div class="col-sm-6">
+        <page-size [size]="page.size" [pageSizes]="pageSizes"
+          (pageSizeChanged)="onPageSizeChange($event)">
+        </page-size>
       </div>
-      <div class="col-sm-4">
+
+      <div class="col-sm-6 pull-right" *ngIf="tableDef.insertable">
+        <button class="btn btn-primary" (click)="navigateToNew($event)">Add New</button>
       </div>
   </div>
   </div>
 
   <div class="col-md-12">
-    <table class="table dataTable table-striped table-hover table-sm table-bordered">
-      <thead>
+    <table class="table data-table table-striped table-hover table-sm table-bordered">
+      <thead class="thead-default">
         <tr>
           <th *ngFor="#col of tableDef.columnDefs"
             [ngClass]="getSortClass(col)" (click)="sort(col)">

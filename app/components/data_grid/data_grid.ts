@@ -4,6 +4,7 @@ import {Http, Headers} from 'angular2/http';
 import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 import {TableDef, ColumnDef, Page, PageRequest, Order} from '../../models/core/core';
 import {DataGridPager} from './data_grid_pager';
+import {PageSizeCmp} from './page_size';
 import {Uri} from '../../services/uri';
 
 @Component({
@@ -11,7 +12,7 @@ import {Uri} from '../../services/uri';
 })
 @View({
   templateUrl: 'components/data_grid/data_grid.html',
-  directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, DataGridPager]
+  directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, DataGridPager, PageSizeCmp]
 })
 export class DataGrid {
   @Input() tableDef: TableDef;
@@ -23,6 +24,7 @@ export class DataGrid {
   pageRequest: PageRequest = new PageRequest();
 
   constructor(private router: Router, private http: Http) {
+    this.pageRequest.size = 10;
   }
 
   onPageSizeChange(pageSize: number) {
@@ -31,7 +33,8 @@ export class DataGrid {
       return;
     }
     this.pageRequest.size = pageSize;
-    this.pageRequest.page = 0;
+    var newPage = ((this.page.number * this.page.size) + this.page.numberOfElements) / pageSize;
+    this.pageRequest.page = Math.floor(newPage);
     this.refreshPage();
   }
 
