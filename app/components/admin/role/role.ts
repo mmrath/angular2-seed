@@ -1,7 +1,6 @@
 import {Component} from 'angular2/core';
 import {RoleService} from '../../../services/admin/admin';
 import {UrlConstants} from '../../../services/url_constants';
-import {CORE_DIRECTIVES} from 'angular2/common';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Role} from '../../../models/admin/admin';
 import {Page, TableDef, ColumnDef} from '../../../models/core/core';
@@ -11,7 +10,7 @@ import 'rxjs/add/operator/map';
 @Component({
   selector: 'role',
   templateUrl: 'components/admin/role/role.html',
-  directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, DataGrid],
+  directives: [ROUTER_DIRECTIVES, DataGrid],
   pipes: []
 })
 export class RoleComponent {
@@ -29,6 +28,7 @@ export class RoleComponent {
     tableDef.insertable = true;
     tableDef.updatable = true;
     tableDef.deletable = true;
+    tableDef.multiSelectable = true;
 
     var columnDefs: Array<ColumnDef> = new Array<ColumnDef>();
 

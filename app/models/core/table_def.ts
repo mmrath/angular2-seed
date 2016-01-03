@@ -6,6 +6,7 @@ export class TableDef {
   insertable: boolean;
   updatable: boolean;
   deletable: boolean;
+  multiSelectable:boolean;
   primaryKeyColumnName: string;
   idColumnName:string;
   versionColumnName: string;

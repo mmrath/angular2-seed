@@ -1,5 +1,4 @@
 import {Component, View, Input, Output, EventEmitter} from 'angular2/core';
-import {CORE_DIRECTIVES} from 'angular2/common';
 import {Http, Headers} from 'angular2/http';
 import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 import {TableDef, ColumnDef, Page, PageRequest, Order} from '../../models/core/core';
@@ -12,7 +11,7 @@ import {Uri} from '../../services/uri';
 })
 @View({
   templateUrl: 'components/data_grid/data_grid.html',
-  directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, DataGridPager, PageSizeCmp]
+  directives: [ROUTER_DIRECTIVES, DataGridPager, PageSizeCmp]
 })
 export class DataGrid {
   @Input() tableDef: TableDef;
@@ -23,13 +22,17 @@ export class DataGrid {
   page: Page<any> = new Page();
   pageRequest: PageRequest = new PageRequest();
 
+  selectedRows: Array<boolean> = new Array();
+  allSelected: boolean = false;
+
   constructor(private router: Router, private http: Http) {
     this.pageRequest.size = 10;
   }
 
   onPageSizeChange(pageSize: number) {
     console.log('Page size:' + pageSize);
-    if (pageSize <= 0 || pageSize >= this.page.totalElements) {
+    if (pageSize <= 0 || (pageSize >= this.page.totalElements && this.page.size >=this.page.totalElements)) {
+      console.log('No need to refresh');
       return;
     }
     this.pageRequest.size = pageSize;
@@ -145,6 +148,28 @@ export class DataGrid {
     }
     return 'disabled';
   }
+
+  toggleSelectAll(event:Event) {
+    if (event.target.checked) {
+      this.selectAllRows();
+    } else {
+      this.resetSelectedRows();
+    }
+  }
+
+  rowSelectionChange(event:Event){
+    if(!event.target.checked && this.allSelected){
+      this.allSelected = false;
+    }
+  }
+  selectAllRows() {
+    if (this.tableDef.multiSelectable) {
+      this.selectedRows = new Array();
+      for (var row of this.page.content) {
+        this.selectedRows.push(true);
+      }
+    }
+  }
   private getPageRequestUrl(): string {
     var queryUri = new Uri(this.apiBase);
     queryUri.addQueryParam('page', this.pageRequest.page);
@@ -166,7 +191,16 @@ export class DataGrid {
       .map(response => response.json())
       .map((data: Page<any>) => { return data; })
       .subscribe(
-      response => { this.page = response; },
+      response => { this.page = response; this.resetSelectedRows(); },
       err => { console.error('Error while fetching data:' + err); });
   }
+  private resetSelectedRows() {
+    if (this.tableDef.multiSelectable) {
+      this.selectedRows = new Array();
+      for (var row of this.page.content) {
+        this.selectedRows.push(false);
+      }
+    }
+  }
+
 }

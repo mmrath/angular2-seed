@@ -1,12 +1,11 @@
 import {Component, View, Input, Output, EventEmitter} from 'angular2/core';
-import {CORE_DIRECTIVES} from 'angular2/common';
 
 @Component({
   selector: 'data-grid-pager'
 })
 @View({
   templateUrl: 'components/data_grid/data_grid_pager.html',
-  directives: [CORE_DIRECTIVES]
+  directives: []
 })
 export class DataGridPager {
   @Input() last: boolean;

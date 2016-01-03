@@ -47,7 +47,9 @@ table.data-table thead .sorting_asc_disabled:after,
 table.data-table thead .sorting_desc_disabled:after {
   color: #eee;
 }
-
+table.data-table tbody tr.selected {
+  background-color:red;
+}
 .data-table > ul.pagination{
   margin-top: 0;
 }

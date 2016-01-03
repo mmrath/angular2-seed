@@ -18,20 +18,27 @@
     <table class="table data-table table-striped table-hover table-sm table-bordered">
       <thead class="thead-default">
         <tr>
+          <th>
+            <template [ngIf]="tableDef.multiSelectable">
+              <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll($event)">
+            </template>
+          </th>
+          <th *ngIf="tableDef.updatable || tableDef.deletable">Action</th>
           <th *ngFor="#col of tableDef.columnDefs"
             [ngClass]="getSortClass(col)" (click)="sort(col)">
             {{col.displayName}}
           </th>
-          <th *ngIf="tableDef.updatable || tableDef.deletable">Action</th>
+
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="#row of page.content">
-          <td *ngFor="#col of tableDef.columnDefs">{{row[col.columnName]}}</td>
+        <tr *ngFor="#row of page.content; #i = index" [ngClass]="{selected:selectedRows[i]}">
+          <td><input type="checkbox" [(ngModel)]="selectedRows[i]" (change)="rowSelectionChange($event)"></td>
           <td *ngIf="tableDef.updatable || tableDef.deletable">
             <a href *ngIf="tableDef.updatable" (click)="navigateToEdit(row[tableDef.idColumnName],$event)">Edit</a>
             <a href *ngIf="tableDef.deletable" (click)="deleteRow(row,$event)">Delete</a>
           </td>
+          <td *ngFor="#col of tableDef.columnDefs">{{row[col.columnName]}}</td>
         </tr>
       </tbody>
     </table>
