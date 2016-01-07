@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
 import {UrlConstants} from '../url_constants';
-import {Permission, Role} from '../../models/admin/admin';
+import {Permission, Role, Resource} from '../../models/admin/admin';
 import {Page} from '../../models/core/core';
 import {Observable} from 'rxjs/Observable';
 
@@ -30,22 +30,22 @@ export class RoleService {
     });
   }
 
-  findAllResources(): Observable<Array<string>> {
+  findAllResources(): Observable<Array<Resource>> {
     return this.http
       .get(UrlConstants.PERMISSION_API + '/resources')
       .map((responseData) => {
       return responseData.json();
-    }).map((permissionGroups: Array<string>) => {
+    }).map((permissionGroups: Array<Resource>) => {
       return permissionGroups;
     });
   }
 
-  findAllPermissionGroups(): Observable<Map<string, Map<string, Permission>>> {
+  findAllPermissionGroups(): Observable<Map<number, Map<string, Permission>>> {
     return this.http
       .get(UrlConstants.PERMISSION_API + '/groups')
       .map((responseData) => {
       return responseData.json();
-    }).map((permissionGroups: Map<string, Map<string, Permission>>) => {
+    }).map((permissionGroups: Map<number, Map<string, Permission>>) => {
       return permissionGroups;
     });
   }
@@ -61,7 +61,8 @@ export class RoleService {
 
   save(role: Role): Observable<Role> {
     console.log(JSON.stringify(role));
-    var headers = new Headers();
+    var headers = new Headers({'Accept': 'application/json',
+    'Content-Type': 'application/json'});
     return this.http.post(UrlConstants.ROLE_API, JSON.stringify(role), { headers: headers })
       .map((responseData) => {
       console.log(responseData);

@@ -1,6 +1,6 @@
 import {Component} from 'angular2/core';
 import {RoleService} from '../../../services/admin/admin';
-import {Role, Permission} from '../../../models/admin/admin';
+import {Role, Permission, Resource} from '../../../models/admin/admin';
 import {RouteParams, RouteData, ROUTER_DIRECTIVES} from 'angular2/router';
 //import {Observable} from 'rxjs/Observable';
 @Component({
@@ -15,8 +15,8 @@ export class RoleDetailComponent {
   id: number;
   role: Role = new Role();
   accessLevels: Array<string>;
-  resources: Array<string>;
-  permissionGroups: Map<string, Map<string, Permission>>;
+  resources: Array<Resource>;
+  permissionGroups: Map<number, Map<string, Permission>>;
   constructor(private roleService: RoleService, routeData: RouteData, params: RouteParams) {
     this.isNew = routeData.get('isNew');
     this.id = +(params.get('id'));
@@ -42,21 +42,24 @@ export class RoleDetailComponent {
       }, err => { console.log('Error ' + err); });
     }
   }
-  isValidPermission(resource: string, accessLevel: string): boolean {
-    if (typeof this.permissionGroups !== 'undefined' && resource in this.permissionGroups) {
-      if (accessLevel in this.permissionGroups[resource]) {
-        return true;
+  isValidPermission(resourceIn: Resource, accessLevel: string): boolean {
+    var returnVal = false;
+    if (typeof this.permissionGroups !== 'undefined') {
+      if (resourceIn.id in this.permissionGroups) {
+        if (accessLevel in this.permissionGroups[resourceIn.id]) {
+          returnVal = true;
+        }
       }
     }
-    return false;
+    return returnVal;
   }
   onSubmit() {
     var selectedPerms = new Array<Permission>();
     for (var resource of this.resources) {
-      if (typeof this.permissionGroups !== 'undefined' && resource in this.permissionGroups) {
+      if (typeof this.permissionGroups !== 'undefined' && resource.id in this.permissionGroups) {
         for (var accessLevel of this.accessLevels) {
-          if (accessLevel in this.permissionGroups[resource] && this.permissionGroups[resource][accessLevel].selected) {
-            selectedPerms.push(this.permissionGroups[resource][accessLevel]);
+          if (accessLevel in this.permissionGroups[resource.id] && this.permissionGroups[resource.id][accessLevel].selected) {
+            selectedPerms.push(this.permissionGroups[resource.id][accessLevel]);
           }
         }
       }
@@ -74,12 +77,11 @@ export class RoleDetailComponent {
     }
     console.log('Updating select status');
     for (var permission of this.role.permissions) {
-      if (permission.resource in this.permissionGroups) {
-        if (permission.accessLevel in this.permissionGroups[permission.resource]) {
-          this.permissionGroups[permission.resource][permission.accessLevel].selected = true;
+      if (permission.resource.id in this.permissionGroups) {
+        if (permission.accessLevel in this.permissionGroups[permission.resource.id]) {
+          this.permissionGroups[permission.resource.id][permission.accessLevel].selected = true;
         }
       }
     }
   }
-
 }

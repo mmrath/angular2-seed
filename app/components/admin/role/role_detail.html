@@ -32,10 +32,10 @@
         <tbody>
 
           <tr *ngFor="#resource of resources">
-            <td>{{resource}}</td>
+            <td>{{resource.name}}</td>
             <td *ngFor="#accessLevel of accessLevels">
               <label *ngIf="isValidPermission(resource, accessLevel)">
-                  <input type="checkbox" [(ngModel)]="permissionGroups[resource][accessLevel].selected" value>{{accessLevel}}
+                  <input type="checkbox" [(ngModel)]="permissionGroups[resource.id][accessLevel].selected" value>{{accessLevel}}-{{permissionGroups[resource.id][accessLevel].selected}}
               </label>
             </td>
           </tr>
