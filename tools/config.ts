@@ -50,7 +50,7 @@ export const NPM_DEPENDENCIES = [
   { src: 'angular2/bundles/http.min.js', inject: 'libs', dest: LIB_DEST },
   { src: 'urijs/src/URI.js', inject: 'libs', dest: LIB_DEST },
   { src: 'urijs/src/URITemplate.js', inject: 'libs', dest: LIB_DEST },
-
+  { src: 'ng2-bootstrap/build/angular2-bootstrap.js', inject: 'libs', dest: LIB_DEST },
   { src: 'bootstrap/dist/css/bootstrap.min.css', inject: true, dest: CSS_DEST }
 ];
 

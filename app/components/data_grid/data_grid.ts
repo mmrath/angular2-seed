@@ -4,10 +4,11 @@ import {Router, ROUTER_DIRECTIVES} from 'angular2/router';
 import {TableDef, ColumnDef, Page, PageRequest, Order} from '../../models/core/core';
 import {DataGridPager} from './data_grid_pager';
 import {PageSizeCmp} from './page_size';
-import {Uri} from '../../services/uri';
+import {DataGridService} from './data_grid_service';
 
 @Component({
-  selector: 'data-grid'
+  selector: 'data-grid',
+  viewProviders: [DataGridService],
 })
 @View({
   templateUrl: 'components/data_grid/data_grid.html',
@@ -25,13 +26,13 @@ export class DataGrid {
   selectedRows: Array<boolean> = new Array();
   allSelected: boolean = false;
 
-  constructor(private router: Router, private http: Http) {
+  constructor(private router: Router, private http: Http, private dataGridService: DataGridService) {
     this.pageRequest.size = 10;
   }
 
   onPageSizeChange(pageSize: number) {
     console.log('Page size:' + pageSize);
-    if (pageSize <= 0 || (pageSize >= this.page.totalElements && this.page.size >=this.page.totalElements)) {
+    if (pageSize <= 0 || (pageSize >= this.page.totalElements && this.page.size >= this.page.totalElements)) {
       console.log('No need to refresh');
       return;
     }
@@ -74,7 +75,7 @@ export class DataGrid {
       event.preventDefault();
       event.stopPropagation();
     }
-    var id: number = row[this.tableDef.idColumnName];
+    var id: number = row[this.tableDef.primaryKeyColumn.columnName];
     console.log('Deleting row:' + JSON.stringify(row));
     var headers = new Headers();
     this.http.delete(this.apiBase + '/' + id, { headers: headers }).subscribe(
@@ -149,16 +150,16 @@ export class DataGrid {
     return 'disabled';
   }
 
-  toggleSelectAll(event:Event) {
-    if (event.target.checked) {
+  toggleSelectAll(event: Event) {
+    if (event.target['checked']) {
       this.selectAllRows();
     } else {
       this.resetSelectedRows();
     }
   }
 
-  rowSelectionChange(event:Event){
-    if(!event.target.checked && this.allSelected){
+  rowSelectionChange(event: Event) {
+    if (!event.target['checked'] && this.allSelected) {
       this.allSelected = false;
     }
   }
@@ -170,25 +171,9 @@ export class DataGrid {
       }
     }
   }
-  private getPageRequestUrl(): string {
-    var queryUri = new Uri(this.apiBase);
-    queryUri.addQueryParam('page', this.pageRequest.page);
-    queryUri.addQueryParam('size', this.pageRequest.size);
-    for (var order of this.pageRequest.sort) {
-      console.log('Sorting with:' + JSON.stringify(order));
-      if (typeof order.direction !== 'undefined') {
-        queryUri.addQueryParam('sort', order.property + ',' + order.direction);
-      } else {
-        queryUri.addQueryParam('sort', order.property);
-      }
-    }
-    return queryUri.toString();
-  }
-
 
   private refreshPage() {
-    this.http.get(this.getPageRequestUrl())
-      .map(response => response.json())
+    this.dataGridService.getPage(this.apiBase, this.pageRequest.page, this.pageRequest.size)
       .map((data: Page<any>) => { return data; })
       .subscribe(
       response => { this.page = response; this.resetSelectedRows(); },

@@ -1,22 +1,25 @@
 import {Component} from 'angular2/core';
-import {RoleService} from '../../../services/admin/admin';
-import {Role, Permission, Resource} from '../../../models/admin/admin';
+import {RoleService} from '../../../services/core/role';
+import {Role, Permission, Resource} from '../../../models/core/core';
 import {RouteParams, RouteData, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Alert} from 'ng2-bootstrap/ng2-bootstrap';
 //import {Observable} from 'rxjs/Observable';
 @Component({
   selector: 'role-detail',
-  templateUrl: 'components/admin/role/role_detail.html',
+  templateUrl: 'components/core/role/role_detail.html',
   providers: [],
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, Alert],
   pipes: []
 })
-export class RoleDetailComponent {
+export class RoleCmp {
   isNew: boolean;
   id: number;
-  role: Role = new Role();
+  role: Role;
   accessLevels: Array<string>;
   resources: Array<Resource>;
   permissionGroups: Map<number, Map<string, Permission>>;
+  selectAllAccessLevel: Map<string, boolean> = new Map<string, boolean>();
+  errorMessages: Array<string> = new Array();
   constructor(private roleService: RoleService, routeData: RouteData, params: RouteParams) {
     this.isNew = routeData.get('isNew');
     this.id = +(params.get('id'));
@@ -40,8 +43,11 @@ export class RoleDetailComponent {
         this.role = res;
         this.updatePermissionSelectStatus();
       }, err => { console.log('Error ' + err); });
+    } else {
+      this.role = new Role();
     }
   }
+
   isValidPermission(resourceIn: Resource, accessLevel: string): boolean {
     var returnVal = false;
     if (typeof this.permissionGroups !== 'undefined') {
@@ -53,21 +59,57 @@ export class RoleDetailComponent {
     }
     return returnVal;
   }
+
+  toggleSelectAllResource(event: Event, accessLevel: string) {
+    var selectAll = false;
+    if (event.target['checked']) {
+      selectAll = true;
+    }
+    if (typeof this.permissionGroups === 'undefined' || typeof this.resources === 'undefined') {
+      return;
+    }
+    for (var resource of this.resources) {
+      if (resource.id in this.permissionGroups && accessLevel in this.permissionGroups[resource.id]) {
+        this.permissionGroups[resource.id][accessLevel].selected = selectAll;
+      }
+    }
+  }
+
+  resetSelectAll(event: Event, accessLevel: string) {
+    if (!event.target['checked']) {
+      this.selectAllAccessLevel[accessLevel] = false;
+    }
+  }
+  closeErrorMessage(i: number) {
+    this.errorMessages.splice(i, 1);
+  }
   onSubmit() {
     var selectedPerms = new Array<Permission>();
     for (var resource of this.resources) {
       if (typeof this.permissionGroups !== 'undefined' && resource.id in this.permissionGroups) {
         for (var accessLevel of this.accessLevels) {
-          if (accessLevel in this.permissionGroups[resource.id] && this.permissionGroups[resource.id][accessLevel].selected) {
+          if (accessLevel in this.permissionGroups[resource.id] &&
+            this.permissionGroups[resource.id][accessLevel].selected) {
             selectedPerms.push(this.permissionGroups[resource.id][accessLevel]);
           }
         }
       }
     }
     this.role.permissions = selectedPerms;
+    this.errorMessages = new Array<string>();
     this.roleService.save(this.role).subscribe(
-      res => { console.log('Success'); },
-      err => { console.log('Error' + err); });
+      res => {
+        console.log('Success');
+      },
+      err => {
+        if (err['status'] === 422) {
+          var body = JSON.parse(err['_body']);
+          for (var error of body.errors) {
+            this.errorMessages.push(error.message);
+          }
+        }
+        console.log('Error' + err);
+      });
   }
 
   private updatePermissionSelectStatus() {

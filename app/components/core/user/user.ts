@@ -1,9 +1,9 @@
 import {Component} from 'angular2/core';
-import {UserService} from '../../../services/admin/admin';
+import {UserService} from '../../../services/core/user';
 
 @Component({
   selector: 'user',
-  templateUrl: 'components/admin/user/user.html',
+  templateUrl: 'components/core/user/user.html',
   directives: [],
   pipes: []
 })

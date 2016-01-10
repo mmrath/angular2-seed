@@ -1,6 +1,6 @@
 import {Component, ViewEncapsulation} from 'angular2/core';
 
-import {UserService, RoleService} from '../../services/admin/admin';
+import {UserService, RoleService} from '../../services/core/core';
 
 
 import {
@@ -12,7 +12,8 @@ ROUTER_DIRECTIVES
 import {HomeCmp} from '../home/home';
 import {AboutCmp} from '../about/about';
 import {NameList} from '../../services/name_list';
-import {UserComponent,RoleComponent,RoleDetailComponent} from '../admin/admin';
+import {UserComponent,RoleListCmp,RoleCmp} from '../core/core';
+
 
 @Component({
   selector: 'app',
@@ -26,9 +27,9 @@ import {UserComponent,RoleComponent,RoleDetailComponent} from '../admin/admin';
   { path: '/', component: HomeCmp, as: 'Home' },
   { path: '/about', component: AboutCmp, as: 'About' },
   { path: '/user', component: UserComponent, as: 'User' },
-  { path: '/role', component: RoleComponent, as: 'Role' },
-  { path: '/role/new', component: RoleDetailComponent, as: 'RoleNew', data: { isNew: true } },
-  { path: '/role/:id', component: RoleDetailComponent, as: 'RoleEdit', data: { isNew: false } }
+  { path: '/role', component: RoleListCmp, as: 'Role' },
+  { path: '/role/new', component: RoleCmp, as: 'RoleNew', data: { isNew: true } },
+  { path: '/role/:id', component: RoleCmp, as: 'RoleEdit', data: { isNew: false } }
 
 ])
 export class AppCmp { }

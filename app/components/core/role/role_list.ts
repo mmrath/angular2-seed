@@ -1,30 +1,26 @@
 import {Component} from 'angular2/core';
-import {RoleService} from '../../../services/admin/admin';
+import {RoleService} from '../../../services/core/role';
 import {UrlConstants} from '../../../services/url_constants';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
-import {Role} from '../../../models/admin/admin';
-import {Page, TableDef, ColumnDef} from '../../../models/core/core';
+import {TableDef, ColumnDef} from '../../../models/core/core';
 import {DataGrid} from '../../data_grid/data_grid';
 import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'role',
-  templateUrl: 'components/admin/role/role.html',
+  templateUrl: 'components/core/role/role_list.html',
   directives: [ROUTER_DIRECTIVES, DataGrid],
   pipes: []
 })
-export class RoleComponent {
-  rolePage: Page<Role> = new Page<Role>();
+export class RoleListCmp {
   roleTableDef: TableDef;
   constructor(public roleService: RoleService) {
-    roleService.findAll().subscribe(
-      res => this.rolePage = res
-      );
+
     var tableDef: TableDef = new TableDef();
 
     tableDef.tableName = 'role';
     tableDef.displayName = 'Roles';
-    tableDef.idColumnName = 'id';
+
     tableDef.insertable = true;
     tableDef.updatable = true;
     tableDef.deletable = true;
@@ -38,11 +34,11 @@ export class RoleComponent {
     idColumn.columnName = 'id';
     idColumn.displayName = 'ID';
     idColumn.searchable = true;
-    idColumn.sortable=true;
-    idColumn.type = 'number';
+    idColumn.sortable = true;
+    idColumn.dataType = 'number';
     idColumn.length = 10;
     columnDefs.push(idColumn);
-
+    tableDef.primaryKeyColumn = idColumn;
     var nameColumn: ColumnDef = new ColumnDef();
     nameColumn.id = 0;
     nameColumn.columnIndex = 2;
@@ -50,7 +46,7 @@ export class RoleComponent {
     nameColumn.displayName = 'Name';
     nameColumn.searchable = true;
     nameColumn.sortable = true;
-    nameColumn.type = 'string';
+    nameColumn.dataType = 'string';
     nameColumn.length = 30;
     columnDefs.push(nameColumn);
 
@@ -61,11 +57,11 @@ export class RoleComponent {
     descriptionColumn.displayName = 'Description';
     descriptionColumn.searchable = true;
     descriptionColumn.sortable = false;
-    descriptionColumn.type = 'string';
+    descriptionColumn.dataType = 'string';
     descriptionColumn.length = 60;
     columnDefs.push(descriptionColumn);
 
-    tableDef.columnDefs = columnDefs;
+    tableDef.columns = columnDefs;
     this.roleTableDef = tableDef;
   }
 

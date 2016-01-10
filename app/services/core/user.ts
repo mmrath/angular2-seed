@@ -1,8 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Http} from 'angular2/http';
 import {UrlConstants} from '../url_constants';
-import {User} from '../../models/admin/admin';
-import {Page} from '../../models/core/core';
+import {User, Page} from '../../models/core/core';
 
 
 @Injectable()
