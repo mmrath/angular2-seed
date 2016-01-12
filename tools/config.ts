@@ -1,15 +1,22 @@
 import {readFileSync} from 'fs';
 import {argv} from 'yargs';
+import {normalize, join} from 'path';
 
 
 // --------------
 // Configuration.
+export const PROJECT_ROOT = normalize(join(__dirname, '..'));
 export const ENV = argv['env'] || 'dev';
 export const DEBUG = argv['debug'] || false;
 export const PORT = argv['port'] || 5555;
 export const LIVE_RELOAD_PORT = argv['reload-port'] || 4002;
 export const DOCS_PORT = argv['docs-port'] || 4003;
 export const APP_BASE = argv['base'] || '/';
+
+export const ENABLE_HOT_LOADING = !!argv['hot-loader'];
+export const HOT_LOADER_PORT = 5578;
+
+export const BOOTSTRAP_MODULE = ENABLE_HOT_LOADING ? 'hot_loader_bootstrap' : 'bootstrap';
 
 export const APP_TITLE = 'My Angular2 App';
 
@@ -29,9 +36,8 @@ export const LIB_DEST = `${APP_DEST}/lib`;
 export const APP_ROOT = ENV === 'dev' ? `${APP_BASE}${APP_DEST}/` : `${APP_BASE}`;
 export const VERSION = appVersion();
 
-export const VERSION_NPM = '2.14.7';
+export const VERSION_NPM = '2.14.2';
 export const VERSION_NODE = '4.0.0';
-
 export const API_BASE = ENV === 'dev' ? `http://localhost:8080` : ``;
 
 // Declare NPM dependencies (Note that globs should not be injected).
@@ -48,9 +54,6 @@ export const NPM_DEPENDENCIES = [
   { src: 'angular2/bundles/angular2.min.js', inject: 'libs', dest: LIB_DEST },
   { src: 'angular2/bundles/router.js', inject: 'libs', dest: LIB_DEST }, // use router.min.js with alpha47
   { src: 'angular2/bundles/http.min.js', inject: 'libs', dest: LIB_DEST },
-  { src: 'urijs/src/URI.js', inject: 'libs', dest: LIB_DEST },
-  { src: 'urijs/src/URITemplate.js', inject: 'libs', dest: LIB_DEST },
-  { src: 'ng2-bootstrap/build/angular2-bootstrap.js', inject: 'libs', dest: LIB_DEST },
   { src: 'bootstrap/dist/css/bootstrap.min.css', inject: true, dest: CSS_DEST }
 ];
 
@@ -72,7 +75,7 @@ const SYSTEM_CONFIG_DEV = {
   defaultJSExtensions: true,
   paths: {
     'bootstrap': `${APP_ROOT}bootstrap`,
-    'urijs': `${APP_BASE}node_modules/urijs/src/URI`,
+    'hot_loader_bootstrap': `${APP_ROOT}hot_loader_bootstrap`,
     '*': `${APP_BASE}node_modules/*`
   }
 };

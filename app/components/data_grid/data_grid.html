@@ -26,7 +26,7 @@
           <th *ngIf="tableDef.updatable || tableDef.deletable">Action</th>
           <th *ngFor="#col of tableDef.columns"
             [ngClass]="getSortClass(col)" (click)="sort(col)">
-            {{col.displayName}}
+            {{col.displayLabel}}
           </th>
 
         </tr>
@@ -35,10 +35,10 @@
         <tr *ngFor="#row of page.content; #i = index" [ngClass]="{selected:selectedRows[i]}">
           <td><input type="checkbox" [(ngModel)]="selectedRows[i]" (change)="rowSelectionChange($event)"></td>
           <td *ngIf="tableDef.updatable || tableDef.deletable">
-            <a href *ngIf="tableDef.updatable" (click)="navigateToEdit(row[tableDef.primaryKeyColumn.columnName],$event)">Edit</a>
+            <a href *ngIf="tableDef.updatable" (click)="navigateToEdit(row[tableDef.primaryKeyColumn.name],$event)">Edit</a>
             <a href *ngIf="tableDef.deletable" (click)="deleteRow(row,$event)">Delete</a>
           </td>
-          <td *ngFor="#col of tableDef.columns">{{row[col.columnName]}}</td>
+          <td *ngFor="#col of tableDef.columns">{{row[col.name]}}</td>
         </tr>
       </tbody>
     </table>

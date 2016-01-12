@@ -53,3 +53,8 @@ table.data-table tbody tr.selected {
 .data-table > ul.pagination{
   margin-top: 0;
 }
+
+
+.col-border{
+  border:1px  #aaa solid;
+}

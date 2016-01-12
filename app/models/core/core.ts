@@ -58,22 +58,22 @@ export class User {
 
 export class ColumnDef {
   id: number;
-  columnIndex: number;
-  columnName: string;
-  displayName: string;
+  index: number;
+  name: string;
+  displayLabel: string;
   nullable: boolean;
   insertable: boolean;
   updatable: boolean;
   searchable: boolean;
   sortable: boolean;
-  visibleInList: boolean;//Visible in List
+  showInList: boolean;//Visible in List
   dataType: string;
   columnType: string; //Audit version column
   length: number;//Datatype Length
-  dataCellTemplate: string;
-  headerCellTemplate: string;
+  dataTemplate: string;
+  headerTemplate: string;
   validPattern: string;
-  validPatternErrorMessage: String;
+  validPatternMessage: string;
   defaultValue: string;
 }
 
@@ -81,7 +81,7 @@ export class TableDef {
   id: number;
   tagId: string;
   tableName: string;
-  displayName: string;
+  displayLabel: string;
   insertable: boolean;
   updatable: boolean;
   deletable: boolean;

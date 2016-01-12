@@ -75,7 +75,7 @@ export class DataGrid {
       event.preventDefault();
       event.stopPropagation();
     }
-    var id: number = row[this.tableDef.primaryKeyColumn.columnName];
+    var id: number = row[this.tableDef.primaryKeyColumn.name];
     console.log('Deleting row:' + JSON.stringify(row));
     var headers = new Headers();
     this.http.delete(this.apiBase + '/' + id, { headers: headers }).subscribe(
@@ -98,8 +98,8 @@ export class DataGrid {
     if (typeof col.sortable === 'undefined' || !col.sortable) {
       return;
     }
-    console.log('Sort by column:' + col.columnName);
-    var colName = col.columnName;
+    console.log('Sort by column:' + col.name);
+    var colName = col.name;
     var found: boolean = false;
     var remove = false;
     var index = -1;
@@ -137,7 +137,7 @@ export class DataGrid {
   getSortClass(col: ColumnDef): string {
     if (typeof col.sortable !== 'undefined' && col.sortable) {
       for (var order of this.pageRequest.sort) {
-        if (order.property === col.columnName) {
+        if (order.property === col.name) {
           if (order.direction === Order.ASC) {
             return 'sorting_asc';
           } else {

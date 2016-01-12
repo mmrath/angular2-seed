@@ -6,7 +6,7 @@ import {Alert} from 'ng2-bootstrap/ng2-bootstrap';
 //import {Observable} from 'rxjs/Observable';
 @Component({
   selector: 'role-detail',
-  templateUrl: 'components/core/role/role_detail.html',
+  templateUrl: 'components/core/role/role.html',
   providers: [],
   directives: [ROUTER_DIRECTIVES, Alert],
   pipes: []
@@ -14,7 +14,7 @@ import {Alert} from 'ng2-bootstrap/ng2-bootstrap';
 export class RoleCmp {
   isNew: boolean;
   id: number;
-  role: Role;
+  role: Role = new Role();
   accessLevels: Array<string>;
   resources: Array<Resource>;
   permissionGroups: Map<number, Map<string, Permission>>;
@@ -43,8 +43,6 @@ export class RoleCmp {
         this.role = res;
         this.updatePermissionSelectStatus();
       }, err => { console.log('Error ' + err); });
-    } else {
-      this.role = new Role();
     }
   }
 
